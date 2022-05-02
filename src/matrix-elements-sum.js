@@ -1,4 +1,4 @@
-const { NotImplementedError } = require('../extensions/index.ks');
+// const { NotImplementedError } = require('../extensions/index.ks');
 
 /**
  * Given matrix, a rectangular matrix of integers,
