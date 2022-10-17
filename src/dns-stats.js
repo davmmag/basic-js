@@ -22,7 +22,7 @@ const { NotImplementedError } = require('../extensions/index.js');
  * }
  *
  */
-function getDNSStats(/* domains */) {
+function getDNSStats(/*SFD */) {
   throw new NotImplementedError('Not implemented');
   // remove line with error and write your code here
 }
