@@ -16,12 +16,10 @@ const { NotImplementedError } = require('../extensions/index.js');
 const getControlSequence = (arr) => {
   const controlSequences = ['--discard-next', '--discard-prev', '--double-next', '--double-prev'];
   let res = {};
-  let count = 0;
   for (let item of controlSequences) {
     if (arr.includes(item)) {
       res.index = arr.indexOf(item);
       res.name = item;
-      count++;
     }
   }
   return res;
@@ -36,25 +34,21 @@ const transform = (arr) => {
   for (let i = 0; i < arr.length; i++) {
     if (name === '--double-prev') {
       if (arr[i] === name) continue;
-      // if (index === 0) continue;
       if (i === index - 1) result.push(arr[i], arr[i]);
       else result.push(arr[i]);
     }
     if (name === '--double-next') {
       if (arr[i] === name) continue;
-      // if (index === arr.length - 1) return [];
       if (i === index + 1) result.push(arr[i], arr[i]);
       else result.push(arr[i]);
     }
     if (name === '--discard-prev') {
       if (arr[i] === name) continue;
-      // if (index === 0) return [];
       if (i === index - 1) continue;
       else result.push(arr[i]);
     }
     if (name === '--discard-next') {
       if (arr[i] === name) continue;
-      // if (index === arr.length - 1) return [];
       if (i === index + 1) continue;
       else result.push(arr[i]);
     }

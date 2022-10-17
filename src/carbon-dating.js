@@ -24,9 +24,14 @@ function dateSample(sampleActivity) {
   if(sampleActivity >= MODERN_ACTIVITY || sampleActivity === 0) return false;
 
   const res = Math.ceil(Math.abs((Math.log(MODERN_ACTIVITY / sampleActivity)) / (0.693 / 5730)));
-
-  return isNaN(res) ? false : res;
+  return isNaN(+res) ? false : +res;
 }
+
+console.log(dateSample('ACTIVITY OVER 9000'), false);
+console.log(dateSample('one'), false);
+console.log(dateSample(''), false);
+console.log(dateSample(' '), false);
+console.log(dateSample(' \n\t\r'), false);
 
 module.exports = {
   dateSample
