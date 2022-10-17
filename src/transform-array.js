@@ -13,37 +13,55 @@ const { NotImplementedError } = require('../extensions/index.js');
  * transform([1, 2, 3, '--discard-prev', 4, 5]) => [1, 2, 4, 5]
  * 
  */
-function transform(arr) {
-  if(!Array.isArray(arr)) throw new Error('\'arr\' parameter must be an instance of the Array!')
-  if(arr.length == 0) return [];
-  let res = [];
-  for(let i = 0; i < arr.length; i++) {
-    if(arr.includes('--discard-next')) {
-      if(arr.indexOf('--discard-next') == i) continue
-      if((arr.indexOf('--discard-next')+ 1) == i) continue;
-      res.push(arr[i]);
-    }
-    if(arr.includes('--discard-prev')) {
-      if(arr.indexOf('--discard-prev') == i) continue
-      if((arr.indexOf('--discard-prev') - 1) == i) continue;
-      res.push(arr[i]);
-    }
-    if(arr.includes('--double-next')) {
-      if(arr.indexOf('--double-next') == i) continue
-      if((arr.indexOf('--double-next') + 1) == i) res.push(arr[i])
-      res.push(arr[i]);
-    }
-    if(arr.includes('--double-prev')) {
-      if(arr.indexOf('--double-prev') == i) continue
-      if((arr.indexOf('--double-prev') - 1) == i) res.push(arr[i])
-      res.push(arr[i]);
+const getControlSequence = (arr) => {
+  const controlSequences = ['--discard-next', '--discard-prev', '--double-next', '--double-prev'];
+  let res = {};
+  let count = 0;
+  for (let item of controlSequences) {
+    if (arr.includes(item)) {
+      res.index = arr.indexOf(item);
+      res.name = item;
+      count++;
     }
   }
-
   return res;
 }
 
-// console.log(transform([1, 2, 3, '--double-prev', 4, 5]) ) // => [1, 2, 3, 4, 4, 5]
+const transform = (arr) => {
+  const result = [];
+  if (!Array.isArray(arr)) throw new Error('\'arr\' parameter must be an instance of the Array!');
+  if (arr.length === 0) return [];
+  const { name, index } = getControlSequence(arr);
+  if (!name) return arr;
+  for (let i = 0; i < arr.length; i++) {
+    if (name === '--double-prev') {
+      if (arr[i] === name) continue;
+      // if (index === 0) continue;
+      if (i === index - 1) result.push(arr[i], arr[i]);
+      else result.push(arr[i]);
+    }
+    if (name === '--double-next') {
+      if (arr[i] === name) continue;
+      // if (index === arr.length - 1) return [];
+      if (i === index + 1) result.push(arr[i], arr[i]);
+      else result.push(arr[i]);
+    }
+    if (name === '--discard-prev') {
+      if (arr[i] === name) continue;
+      // if (index === 0) return [];
+      if (i === index - 1) continue;
+      else result.push(arr[i]);
+    }
+    if (name === '--discard-next') {
+      if (arr[i] === name) continue;
+      // if (index === arr.length - 1) return [];
+      if (i === index + 1) continue;
+      else result.push(arr[i]);
+    }
+  }
+  return result;
+}
+console.log(transform([1, 2, 3, '--double-prev', 4, 5]) ) // => [1, 2, 3, 4, 4, 5]
 
 module.exports = {
   transform
